@@ -475,7 +475,23 @@
         /* IP地址样式 */
         .footer-info .ip-address {
             font-weight: bold;
-            color: #a29bfe; /* 文本颜色：浅紫色 */
+            color: #25D366; /* 文本颜色：绿色 */
+        }
+
+        /* 链接样式 */
+        .footer-info a {
+            text-decoration: none;
+            font-weight: bold;
+            color: inherit;
+        }
+
+        .footer-info a:hover {
+            text-decoration: underline;
+        }
+
+        /* 夜间模式链接样式 */
+        body.dark-mode .footer-info a {
+            color: white;
         }
         
         /* 夜间模式IP地址 */
@@ -885,7 +901,7 @@
 
             <div class="login-header">
                 <img 
-                    src="https://cdn.jsdelivr.net/gh/leeyuchen4073/leeyuchen99.github.io/assets/icons/favicon-96x96.png" 
+                    src="https://cdn.jsdelivr.net/gh/leeyuchen4073/leeyuchen.github.io/assets/icons/favicon-96x96.png" 
                     alt="图标" 
                     class="header-icon"
                     onclick="window.open('https://github.com/leeyuchen4073', '_blank')"
@@ -1594,7 +1610,7 @@
                 const ip = data.data.ip;
                 const address = data.data.address || '';
                 const isp = data.data.isp || '';
-                const welcomeMessage = `欢迎 ${address} ${isp}IP： <span class="ip-address" style="color: #25D366;">${ip}</span> 的小伙伴访问本站`;
+                const welcomeMessage = `欢迎 <a href="http://api.nange.cn/" target="_blank">${address}</a> <a href="http://test.ustc.edu.cn/" target="_blank">${isp} IP：</a> <a href="https://ipw.cn/ip/" target="_blank" class="ip-address">${ip}</a> 的小伙伴访问本站`;
                 
                 if (welcomeEl) {
                   welcomeEl.innerHTML = welcomeMessage;
@@ -1617,13 +1633,13 @@
                     let welcomeMessage;
                     
                     if (country === '中国') {
-                      welcomeMessage = `欢迎 ${region}${city} ${isp}IP： <span class="ip-address">${ip}</span> 的小伙伴访问本站`;
-                    } else {
-                      welcomeMessage = `欢迎 ${country}${isp} <span class="ip-address">${ip}</span> 的小伙伴访问本站`;
-                    }
-                    
-                    if (welcomeEl) {
-                      welcomeEl.innerHTML = welcomeMessage.replace(/<span class="ip-address">([^<]+)<\/span>/g, '<span class="ip-address" style="color: #25D366;">$1</span>');
+                                        welcomeMessage = `欢迎 <a href="http://api.nange.cn/" target="_blank">${region}${city}</a> <a href="http://test.ustc.edu.cn/" target="_blank">${isp} IP：</a> <a href="https://ipw.cn/ip/" target="_blank" class="ip-address">${ip}</a> 的小伙伴访问本站`;
+                                    } else {
+                                        welcomeMessage = `欢迎 <a href="http://api.nange.cn/" target="_blank">${country}</a> <a href="http://test.ustc.edu.cn/" target="_blank">${isp} IP：</a> <a href="https://ipw.cn/ip/" target="_blank" class="ip-address">${ip}</a> 的小伙伴访问本站`;
+                                    }
+                                    
+                                    if (welcomeEl) {
+                                        welcomeEl.innerHTML = welcomeMessage;
                       welcomeEl.classList.add('loaded');
                     }
                   }
@@ -1635,7 +1651,7 @@
                     .then(response => response.json())
                     .then(data => {
                       const ip = data.ip;
-                      const welcomeMessage = `欢迎 <span class="ip-address" style="color: #25D366;">${ip}</span> 的小伙伴访问本站`;
+                      const welcomeMessage = `欢迎 <a href="https://ipw.cn/ip/" target="_blank" class="ip-address">${ip}</a> 的小伙伴访问本站`;
                       if (welcomeEl) {
                         welcomeEl.innerHTML = welcomeMessage;
                         welcomeEl.classList.add('loaded');
@@ -1722,7 +1738,7 @@
             if (apiIndex >= apis.length) {
               // 所有接口都失败，显示默认句子
               if (hitokotoEl) {
-                hitokotoEl.innerHTML = `<a href="#" id="hitokoto_text" style="color: #25D366;">“ ${defaultSentence}”</a>`;
+                hitokotoEl.innerHTML = `<a href="https://hitokoto.cn/" target="_blank" id="hitokoto_text" style="color: #25D366;">“ ${defaultSentence}”</a>`;
                 addSignature();
               }
               if (hitokotoParent) {
@@ -1756,9 +1772,9 @@
               if (hitokotoEl) {
                 const currentContent = hitokotoEl.textContent;
                 if (currentContent && !currentContent.startsWith('“')) {
-                  hitokotoEl.innerHTML = `<a href="#" id="hitokoto_text" style="color: #25D366;">“ ${currentContent}”</a>`;
+                    hitokotoEl.innerHTML = `<a href="https://hitokoto.cn/" target="_blank" id="hitokoto_text" style="color: #25D366;">“ ${currentContent}”</a>`;
                 }
-              }
+            }
               if (hitokotoParent) {
                 hitokotoParent.classList.add('loaded');
               }
