@@ -14,52 +14,54 @@
     <!-- Font Awesome -->
     <link href="https://npm.elemecdn.com/font6pro@6.0.1/css/all.min.css" rel="stylesheet">
     
-    <!-- 模式初始化 -->
+    <!-- 模式初始化脚本（必须保留在头部，用于页面加载时立即设置模式和背景） -->
     <script id="mode-init">
         (function() {
             try {
                 const isDark = localStorage.getItem('darkMode') === 'true';
                 
-                if (isDark) {
-                    if (document.body) {
-                        document.body.classList.add('dark-mode');
-                        document.body.classList.add('hope-ui-dark');
-                        document.body.classList.remove('hope-ui-light');
+                // 设置初始模式
+                const body = document.body;
+                const modeIcon = document.getElementById('modeIcon');
+                
+                if (body) {
+                    if (isDark) {
+                        body.classList.add('dark-mode');
+                        body.classList.add('hope-ui-dark');
+                        body.classList.remove('hope-ui-light');
                     } else {
-                        document.addEventListener('DOMContentLoaded', function() {
-                            document.body.classList.add('dark-mode');
-                            document.body.classList.add('hope-ui-dark');
-                            document.body.classList.remove('hope-ui-light');
-                            const modeIcon = document.getElementById('modeIcon');
-                            if (modeIcon) {
-                                modeIcon.textContent = '🌙';
-                            }
-                        });
-                    }
-                    const modeIcon = document.getElementById('modeIcon');
-                    if (modeIcon) {
-                        modeIcon.textContent = '🌙';
+                        body.classList.remove('dark-mode');
+                        body.classList.add('hope-ui-light');
+                        body.classList.remove('hope-ui-dark');
                     }
                 } else {
-                    if (document.body) {
-                        document.body.classList.remove('dark-mode');
-                        document.body.classList.add('hope-ui-light');
-                        document.body.classList.remove('hope-ui-dark');
-                    } else {
-                        document.addEventListener('DOMContentLoaded', function() {
-                            document.body.classList.remove('dark-mode');
-                            document.body.classList.add('hope-ui-light');
-                            document.body.classList.remove('hope-ui-dark');
-                            const modeIcon = document.getElementById('modeIcon');
-                            if (modeIcon) {
-                                modeIcon.textContent = '☀️';
+                    // DOM还未加载完成，添加事件监听器
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const body = document.body;
+                        if (body) {
+                            if (isDark) {
+                                body.classList.add('dark-mode');
+                                body.classList.add('hope-ui-dark');
+                                body.classList.remove('hope-ui-light');
+                            } else {
+                                body.classList.remove('dark-mode');
+                                body.classList.add('hope-ui-light');
+                                body.classList.remove('hope-ui-dark');
                             }
-                        });
-                    }
-                    const modeIcon = document.getElementById('modeIcon');
-                    if (modeIcon) {
-                        modeIcon.textContent = '☀️';
-                    }
+                        }
+                    });
+                }
+                
+                if (modeIcon) {
+                    modeIcon.textContent = isDark ? '🌙' : '☀️';
+                } else {
+                    // DOM还未加载完成，添加事件监听器
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const modeIcon = document.getElementById('modeIcon');
+                        if (modeIcon) {
+                            modeIcon.textContent = isDark ? '🌙' : '☀️';
+                        }
+                    });
                 }
                 
                 // 提前加载背景图设置
@@ -86,38 +88,43 @@
     
     <!-- 样式定义 -->
     <style>
-        /* 
-        CSS属性说明：
+        /* CSS属性说明（修改后会影响的部分）：
         
-        背景相关属性：
-        - background-repeat: 控制背景图片是否重复显示，可选值：repeat(重复)、no-repeat(不重复)、repeat-x(水平重复)、repeat-y(垂直重复)
-        - background-size: 控制背景图片大小，可选值：cover(覆盖整个容器)、contain(完全包含在容器内)、具体尺寸(如100px 100px)
-        - background-attachment: 控制背景图片是否随页面滚动，可选值：scroll(随内容滚动)、fixed(固定不动)、local(随元素内容滚动)
-        - background-position: 控制背景图片位置，可选值：center(居中)、top(顶部)、bottom(底部)、left(左侧)、right(右侧)、具体坐标(如50% 50%)
+        背景相关：
+        - background-color: 背景颜色，影响整个页面或元素背景
+        - background-image: 背景图片，可通过设置弹窗修改
+        - background-size: 背景图片大小，如cover(覆盖)或contain(包含)
+        - background-position: 背景图片位置，如center(居中)
         
-        字体相关属性：
-        - font-family: 设置字体类型，如'LXGW WenKai'、'Microsoft YaHei'等
-        - font-weight: 设置字体粗细，可选值：normal(正常)、bold(粗体)、100-900(数值表示)
-        - font-size: 设置字体大小，可选值：px(像素)、em(相对父元素)、rem(相对根元素)、%等
+        字体相关：
+        - font-family: 字体类型，全局使用LXGW WenKai
+        - font-size: 字体大小，影响文字显示大小
+        - font-weight: 字体粗细，如normal(正常)或bold(加粗)
+        - color: 文字颜色，不同模式下有不同默认值
         
-        布局相关属性：
-        - display: 控制元素显示方式，可选值：block(块级元素)、inline(行内元素)、inline-block(行内块元素)、flex(弹性布局)、grid(网格布局)等
-        - position: 控制元素定位方式，可选值：static(默认)、relative(相对定位)、absolute(绝对定位)、fixed(固定定位)、sticky(粘性定位)
-        - top/right/bottom/left: 控制定位元素的位置偏移
-        - transform: 控制元素变换，可选值：translate(平移)、rotate(旋转)、scale(缩放)、skew(倾斜)等
-        - justify-content: 控制flex/grid容器中主轴方向的对齐方式
-        - align-items: 控制flex/grid容器中交叉轴方向的对齐方式
-        - gap: 控制flex/grid容器中元素之间的间距
-        - z-index: 控制元素堆叠顺序，数值越大越靠上
+        布局相关：
+        - width/height: 宽度/高度，影响元素大小
+        - margin/padding: 外边距/内边距，影响元素间距
+        - display: 显示方式，如flex(弹性布局)
+        - position: 定位方式，如relative(相对)或absolute(绝对)
         
-        其他常用属性：
-        - opacity: 控制元素透明度，0-1之间的数值
-        - border-radius: 控制元素圆角大小
-        - box-shadow: 控制元素阴影效果
-        - backdrop-filter: 控制元素背景模糊效果
-        - transition: 控制元素过渡动画效果
-        - animation: 控制元素关键帧动画效果
-        -->
+        边框和圆角：
+        - border: 边框样式，如宽度、颜色、样式
+        - border-radius: 圆角大小，影响元素边角圆润度
+        
+        阴影和效果：
+        - box-shadow: 盒子阴影，增加立体感
+        - text-shadow: 文字阴影，增强文字效果
+        - backdrop-filter: 背景模糊效果，影响半透明元素
+        
+        动画和过渡：
+        - animation: 动画效果，如浮动、呼吸动画
+        - transition: 过渡效果，如悬停时的变化
+        
+        模式相关：
+        - body.dark-mode: 夜间模式样式，修改时注意对应白天模式
+        - 颜色变量: 可通过CSS变量统一管理颜色
+        */
         
         /* 全局样式重置 */
         * {
@@ -126,38 +133,37 @@
             box-sizing: border-box;
         }
         
-        /* 白天模式背景 - 使用自定义背景图片变量 */
-        .hope-ui-light {
-            background-image: var(--light-bg-image) !important;
+        /* 背景样式 - 包含共同的背景属性 */
+        .hope-ui-light,
+        .hope-ui-dark {
             background-repeat: no-repeat;
             background-size: cover;
             background-attachment: fixed;
             background-position: center;
+        }
+        
+        /* 白天模式背景 - 使用自定义背景图片变量 */
+        .hope-ui-light {
+            background-image: var(--light-bg-image) !important;
             color: #2d3748; /* 白天模式文本颜色：深灰色 */
         }
         
         /* 夜间模式背景 - 使用自定义背景图片变量 */
         .hope-ui-dark {
             background-image: var(--dark-bg-image) !important;
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-attachment: fixed;
-            background-position: center;
             color: #ffffff; /* 夜间模式文本颜色：白色 */
         }
         
         /* 基础body样式 */
         body {
             min-height: 100vh;
-            font-family: LXGW WenKai; /* 全局字体：LXGW WenKai */
-            font-weight: bold;
             overflow-x: hidden;
         }
         
         /* 全局字体设置 */
         * {
-            font-family: LXGW WenKai;
-            font-weight: bold;
+            font-family: LXGW WenKai; /* 全局字体：LXGW WenKai */
+            font-weight: bold; /* 字体粗细：加粗 */
         }
         
         /* 登录容器 */
@@ -432,113 +438,6 @@
             border-color: rgba(25, 215, 135, 0.8);
         }
         
-        /* 底部信息区域 */
-        .footer-info {
-            position: fixed;
-            bottom: 48px;
-            left: 20px;
-            right: 20px;
-            text-align: center;
-            z-index: 888; /* 层级：888 */
-            color: rgba(0, 0, 0, 0.9); /* 文本颜色：深灰色，透明度：0.9 */
-        }
-        
-        /* 夜间模式底部信息 */
-        body.dark-mode .footer-info {
-            color: white; /* 文本颜色：白色 */
-            opacity: 0.99; /* 透明度：0.99 */
-        }
-        
-        /* 夜间模式IP地址 */
-        body.dark-mode .footer-info .ip-address {
-            opacity: 1; /* 透明度：1 */
-        }
-        
-        /* 欢迎信息样式 */
-        .footer-info #welcome {
-            margin-bottom: 10px;
-            font-size: 14px; /* 字体大小：14px */
-        }
-        
-        /* 一言信息样式 */
-        .footer-info #hitokoto {
-            margin-bottom: 10px;
-            font-size: 14px; /* 字体大小：14px */
-        }
-        
-        /* 运行时间样式 */
-        .footer-info .runtime {
-            font-size: 12px; /* 字体大小：12px */
-            opacity: 0.9; /* 透明度：0.9 */
-        }
-        
-        /* IP地址样式 */
-        .footer-info .ip-address {
-            font-weight: bold;
-            color: #25D366; /* 文本颜色：绿色 */
-        }
-
-        /* 链接样式 */
-        .footer-info a {
-            text-decoration: none;
-            font-weight: bold;
-            color: inherit;
-        }
-
-        .footer-info a:hover {
-            text-decoration: underline;
-        }
-
-        /* 夜间模式链接样式 */
-        body.dark-mode .footer-info a {
-            color: white;
-        }
-        
-        /* 夜间模式IP地址 */
-        body.dark-mode .footer-info .ip-address {
-            color: rgba(25, 215, 135, 0.9); /* 文本颜色：青绿色，透明度：0.9 */
-        }
-        
-        /* 移动端适配 */
-        @media (max-width: 768px) {
-            .login-box {
-                padding: 90px 20px 20px;
-                margin: 20px;
-            }
-            
-            .login-header {
-                font-size: 20px; /* 字体大小：20px */
-                gap: 10px;
-            }
-            
-            .header-icon {
-                width: 35px;
-                height: 35px;
-            }
-            
-            .setting-btn,
-            .mode-switch {
-                width: 35px;
-                height: 35px;
-            }
-            
-            .footer-info {
-                bottom: 48px;
-                left: 10px;
-                right: 10px;
-                padding: 0;
-            }
-            
-            .footer-info #hitokoto,
-            .footer-info #welcome {
-                font-size: 12px; /* 字体大小：12px */
-            }
-            
-            .footer-info .runtime {
-                font-size: 11px; /* 字体大小：11px */
-            }
-        }
-        
         /* 设置按钮 */
         .setting-btn {
             position: absolute;
@@ -599,6 +498,109 @@
             transform: scale(1.1) rotate(360deg); /* 缩放1.1倍，旋转360度 */
         }
         
+        /* 底部信息区域 */
+        .footer-info {
+            position: fixed;
+            bottom: 48px;
+            left: 20px;
+            right: 20px;
+            text-align: center;
+            z-index: 888; /* 层级：888 */
+            color: rgba(0, 0, 0, 0.9); /* 文本颜色：深灰色，透明度：0.9 */
+        }
+        
+        /* 夜间模式底部信息 */
+        body.dark-mode .footer-info {
+            color: white; /* 文本颜色：白色 */
+            opacity: 0.99; /* 透明度：0.99 */
+        }
+        
+        /* 一言信息样式 */
+        .footer-info #hitokoto {
+            margin-bottom: 10px;
+            font-size: 14px; /* 字体大小：14px */
+        }
+        
+        /* 欢迎信息样式 */
+        .footer-info #welcome {
+            margin-bottom: 10px;
+            font-size: 14px; /* 字体大小：14px */
+        }
+        
+        /* IP地址样式 */
+        .footer-info .ip-address {
+            font-weight: bold;
+            color: #25D366; /* 文本颜色：绿色 */
+        }
+        
+        /* 运行时间样式 */
+        .footer-info .runtime {
+            font-size: 12px; /* 字体大小：12px */
+            opacity: 0.9; /* 透明度：0.9 */
+        }
+        
+        /* 链接样式 */
+        .footer-info a {
+            text-decoration: none;
+            font-weight: bold;
+            color: inherit;
+        }
+
+        .footer-info a:hover {
+            text-decoration: underline;
+        }
+
+        /* 夜间模式链接样式 */
+        body.dark-mode .footer-info a {
+            color: white;
+        }
+        
+        /* 夜间模式IP地址 */
+        body.dark-mode .footer-info .ip-address {
+            color: rgba(25, 215, 135, 0.9); /* 文本颜色：青绿色，透明度：0.9 */
+            opacity: 1; /* 透明度：1 */
+        }
+        
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .login-box {
+                padding: 90px 20px 20px;
+                margin: 20px;
+            }
+            
+            .login-header {
+                font-size: 20px; /* 字体大小：20px */
+                gap: 10px;
+            }
+            
+            .header-icon {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .setting-btn,
+            .mode-switch {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .footer-info {
+                bottom: 48px;
+                left: 10px;
+                right: 10px;
+                padding: 0;
+            }
+            
+            .footer-info #hitokoto,
+            .footer-info #welcome {
+                font-size: 12px; /* 字体大小：12px */
+            }
+            
+            .footer-info .runtime {
+                font-size: 11px; /* 字体大小：11px */
+            }
+        }
+        
         /* 禁用登录框内所有元素的文本选择功能 */
         .login-box {
             user-select: none;
@@ -654,18 +656,20 @@
         
         /* 错误提示样式 */
         .toast-notice.toast-error {
-            background: linear-gradient(135deg, #ff4444, #ff6666); /* 渐变颜色：红色到浅红色 */
+            background: linear-gradient(135deg, #000000, #ff4444); /* 渐变颜色：统一红色 */
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            font-weight: bolder; /* 字体加粗 */
         }
         
         /* 夜间模式错误提示 */
         body.dark-mode .toast-notice.toast-error {
-            background: linear-gradient(135deg, #ff6b6b, #ff8787); /* 渐变颜色：红色到浅红色 */
+            background: linear-gradient(135deg, #ff4444, #000000); /* 渐变颜色：统一红色 */
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            font-weight: bolder; /* 字体加粗 */
         }
         
         /* 设置弹窗 */
@@ -910,7 +914,7 @@
             </div>
 
             <div class="input-container">
-                <input type="password" placeholder="输入您的密码" id="password" oncopy="return false;" oncut="return false;" onkeypress="if(event.keyCode==13) login();">
+                <input type="password" placeholder="输入您的密码" id="password" oncopy="return false;" oncut="return false;" onkeypress="if(event.keyCode==13) login();" autocomplete="off">
             </div>
 
             <div class="checkbox-wrapper">
@@ -971,9 +975,11 @@
         </div>
     </div>
 
-    <!-- 全局变量 -->
+    <!-- 脚本区域（所有脚本集中在底部，按照依赖顺序排列） -->
+    
+    <!-- 1. 全局变量定义 -->
     <script id="global-variables">
-        // 缓存DOM元素，提高访问速度
+        // DOM元素缓存
         const elements = {
             passwordInput: document.getElementById('password'),         // 密码输入框
             rememberPwd: document.getElementById('rememberPwd'),         // 记住密码复选框
@@ -988,39 +994,190 @@
         };
         
         // 全局变量
-        let realSavedPwd = null; // 真实保存的密码
+        let realSavedPassword = null; // 真实保存的密码
+        // 密码失败次数和禁止登录相关变量
+        const MAX_FAILED_ATTEMPTS = 5; // 最大失败次数
+        const LOCKOUT_DURATION = 30 * 60 * 1000; // 禁止登录时长（30分钟）
+        const CLEAR_BUTTON_SEQUENCE = 5; // 清除按钮连击次数
         const SECRET_KEY_HASH = "4813494d137e1631bba301d5acab6e7bb7aa74ce1185d456565ef51d737677b2"; // 密码哈希值
         const ENCRYPTION_KEY = "leeyuchen_cache_key_2026"; // 加密密钥
         const PASSWORD_CACHE_KEY = "encrypted_password"; // 密码缓存键名
-    </script>
-
-    <!-- 模式切换功能 -->
-    <script id="mode-switch">
-        // 切换白天/夜间模式
-        function toggleMode() {
-            requestAnimationFrame(() => {
-                const body = document.body;
-                const modeIcon = elements.modeIcon;
-                const isDark = body.classList.toggle('dark-mode');
-                
-                // 切换对应的CSS类
-                body.classList.toggle('hope-ui-light', !isDark);
-                body.classList.toggle('hope-ui-dark', isDark);
-                
+        
+        // 统一的提示词管理
+        const ToastMessages = {
+            success: {
+                login: '登录成功，正在跳转到主页...',
+                clearCache: '登录和数据缓存已清除，配置设置已保留',
+                saveSetting: '设置已保存',
+                bgSettingSaved: '背景设置已保存',
+                darkMode: '已切换到夜间模式',
+                lightMode: '已切换到白天模式',
+                lockoutReset: '登录限制已重置，数据已清除，网站已还原为初始化状态'
+            },
+            error: {
+                loginFailed: '登录失败，请检查密码',
+                networkError: '网络错误，请检查网络连接',
+                emptyPassword: '请输入密码',
+                clearCacheFailed: '清除缓存失败，请重试',
+                loadCacheFailed: '加载缓存失败',
+                decryptFailed: '解密失败，请重新登录',
+                saveCacheFailed: '保存缓存失败',
+                savePasswordFailed: '保存密码失败，但登录成功',
+                tooManyAttempts: '密码错误次数过多，请30分钟后再试',
+                lockedOut: '账户已被暂时锁定，请30分钟后再试'
+            }
+        };
+        
+        // 模式管理函数
+        function setMode(isDark) {
+            const body = document.body;
+            const modeIcon = document.getElementById('modeIcon');
+            
+            if (body) {
                 if (isDark) {
-                    modeIcon.textContent = '🌙'; // 夜间模式图标
-                    localStorage.setItem('darkMode', 'true'); // 保存模式设置
-                    setTimeout(() => showToast('已切换到夜间模式'), 0);
+                    body.classList.add('dark-mode');
+                    body.classList.add('hope-ui-dark');
+                    body.classList.remove('hope-ui-light');
                 } else {
-                    modeIcon.textContent = '☀️'; // 白天模式图标
-                    localStorage.setItem('darkMode', 'false'); // 保存模式设置
-                    setTimeout(() => showToast('已切换到白天模式'), 0);
+                    body.classList.remove('dark-mode');
+                    body.classList.add('hope-ui-light');
+                    body.classList.remove('hope-ui-dark');
                 }
-            });
+            }
+            
+            if (modeIcon) {
+                modeIcon.textContent = isDark ? '🌙' : '☀️';
+            }
+            
+            localStorage.setItem('darkMode', isDark.toString());
         }
     </script>
 
-    <!-- 密码加密功能 -->
+    <!-- 2. Toast消息功能（基础UI组件，被其他模块使用） -->
+    <script id="toast-message">
+        function showToast(message, isError = false) {
+            const fragment = document.createDocumentFragment();
+            const toast = document.createElement('div');
+            toast.className = `toast-notice ${isError ? 'toast-error' : ''}`;
+            toast.textContent = message;
+            fragment.appendChild(toast);
+            document.body.appendChild(fragment);
+            
+            // 3秒后自动移除
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 3000);
+        }
+    </script>
+
+    <!-- 3. 错误处理工具函数 -->
+    <script id="error-handler">
+        // 通用错误处理函数
+        function handleError(error, context, options = {}) {
+            const {
+                showToast: shouldShowToast = false,
+                toastMessage = '操作失败，请重试',
+                clearCache: shouldClearCache = false,
+                cacheKey = null
+            } = options;
+            
+            // 打印错误信息
+            console.error(`${context}失败:`, error);
+            
+            // 清除缓存（如果需要）
+            if (shouldClearCache && cacheKey) {
+                localStorage.removeItem(cacheKey);
+            }
+            
+            // 显示错误提示（如果需要）
+            if (shouldShowToast) {
+                showToast(toastMessage, true);
+            }
+        }
+    </script>
+
+    <!-- 4. 缓存管理模块 -->
+    <script id="cache-management">
+        // 缓存变量
+        let ipCache = null; // IP地址缓存
+        const IP_CACHE_EXPIRY = 3600000; // IP缓存过期时间：1小时
+        let staticResourceCache = {}; // 静态资源缓存
+        const STATIC_CACHE_EXPIRY = 21600000; // 静态资源缓存过期时间：6小时
+        
+        // 缓存管理类
+        const CacheManager = {
+            // 缓存静态资源（如图片）
+            async cacheStaticResource(url) {
+                return new Promise((resolve, reject) => {
+                    const now = Date.now();
+                    
+                    // 检查缓存是否有效
+                    if (staticResourceCache[url] && (now - staticResourceCache[url].timestamp < STATIC_CACHE_EXPIRY)) {
+                        resolve(staticResourceCache[url].data);
+                        return;
+                    }
+                    
+                    // 重新获取资源
+                    const img = new Image();
+                    img.onload = function() {
+                        staticResourceCache[url] = {
+                            data: url,
+                            timestamp: Date.now()
+                        };
+                        resolve(url);
+                    };
+                    img.onerror = function() {
+                        reject(new Error('加载资源失败'));
+                    };
+                    img.src = url;
+                });
+            },
+            
+            // 缓存IP地址信息
+            cacheIP(data) {
+                ipCache = {
+                    data: data,
+                    timestamp: Date.now()
+                };
+            },
+            
+            // 获取IP缓存（1小时过期）
+            getIPCache() {
+                const now = Date.now();
+                if (ipCache && (now - ipCache.timestamp < IP_CACHE_EXPIRY)) {
+                    return ipCache.data;
+                }
+                return null;
+            },
+            
+            // 清除所有缓存
+            clearAll() {
+                ipCache = null;
+                staticResourceCache = {};
+            },
+            
+            // 清除指定类型的缓存
+            clear(type) {
+                switch (type) {
+                    case 'ip':
+                        ipCache = null;
+                        break;
+                    case 'static':
+                        staticResourceCache = {};
+                        break;
+                    default:
+                        this.clearAll();
+                }
+            }
+        };
+        
+        // 导出缓存管理实例
+        window.CacheManager = CacheManager;
+    </script>
+
+    <!-- 5. 密码加密功能 -->
     <script id="password-encryption">
         // 哈希密码
         async function hashPassword(password) {
@@ -1055,7 +1212,7 @@
                     data: Array.from(new Uint8Array(encrypted))
                 };
             } catch (error) {
-                console.error('加密失败:', error);
+                handleError(error, '加密');
                 throw error;
             }
         }
@@ -1068,9 +1225,10 @@
                 const decoder = new TextDecoder();
                 return JSON.parse(decoder.decode(decrypted));
             } catch (error) {
-                console.error('解密失败:', error);
-                // 清除损坏的密码数据
-                localStorage.removeItem(PASSWORD_CACHE_KEY);
+                handleError(error, '解密', {
+                    clearCache: true,
+                    cacheKey: PASSWORD_CACHE_KEY
+                });
                 return null;
             }
         }
@@ -1082,7 +1240,7 @@
                 localStorage.setItem(PASSWORD_CACHE_KEY, JSON.stringify(encrypted));
                 return true;
             } catch (error) {
-                console.error('保存密码失败:', error);
+                handleError(error, '保存密码');
                 return false;
             }
         }
@@ -1093,9 +1251,10 @@
                 const encrypted = localStorage.getItem(PASSWORD_CACHE_KEY);
                 return encrypted ? await decrypt(JSON.parse(encrypted)) : null;
             } catch (error) {
-                console.error('加载密码失败:', error);
-                // 清除损坏的密码数据
-                localStorage.removeItem(PASSWORD_CACHE_KEY);
+                handleError(error, '加载密码', {
+                    clearCache: true,
+                    cacheKey: PASSWORD_CACHE_KEY
+                });
                 return null;
             }
         }
@@ -1103,16 +1262,16 @@
         // 清除密码
         function clearPassword() {
             localStorage.removeItem(PASSWORD_CACHE_KEY);
-            realSavedPwd = null;
+            realSavedPassword = null;
         }
     </script>
 
-    <!-- 设置管理功能 -->
+    <!-- 6. 设置管理功能 -->
     <script id="settings-management">
         // 保存设置
         function saveSettings(settings) {
             Object.keys(settings).forEach(key => {
-                if (key !== 'savedPwd') {
+                if (key !== 'savedPassword') {
                     localStorage.setItem(key, JSON.stringify(settings[key]));
                 }
             });
@@ -1136,12 +1295,29 @@
         }
     </script>
 
-    <!-- 清除按钮功能 -->
+    <!-- 7. 模式切换功能 -->
+    <script id="mode-switch">
+        // 切换白天/夜间模式
+        function toggleMode() {
+            requestAnimationFrame(() => {
+                const body = document.body;
+                const isDark = !body.classList.contains('dark-mode');
+                
+                // 使用统一的模式管理函数
+                setMode(isDark);
+                
+                // 显示切换提示
+                setTimeout(() => showToast(isDark ? ToastMessages.success.darkMode : ToastMessages.success.lightMode), 0);
+            });
+        }
+    </script>
+
+    <!-- 8. 清除按钮功能 -->
     <script id="clear-button">
         // 清除输入
         function clearInput() {
             elements.passwordInput.value = '';
-            realSavedPwd = null;
+            realSavedPassword = null;
             // 聚焦到密码输入框
             setTimeout(() => {
                 elements.passwordInput.focus();
@@ -1155,16 +1331,20 @@
                 clearPassword();
                 localStorage.removeItem('autoLogin');
                 clearInput();
-                showToast('登录缓存已清除，背景配置和模式设置已保留');
+                // 清除所有缓存
+                CacheManager.clearAll();
+                showToast(ToastMessages.success.clearCache);
                 // 强制重新聚焦到密码输入框
                 setTimeout(() => {
                     elements.passwordInput.focus();
                 }, 50);
             } catch (error) {
                 console.error('清除缓存失败:', error);
-                showToast('清除缓存失败，请重试', true);
+                showToast(ToastMessages.error.clearCacheFailed, true);
             }
         }
+        
+
 
         // 设置清除按钮的事件处理
         function setupClearButton() {
@@ -1180,8 +1360,7 @@
                 
                 // 使用更精确的事件处理，确保只影响清除按钮
                 clearBtn.addEventListener('click', function(e) {
-                    // 只阻止清除按钮的默认行为，不影响其他按钮
-                    e.stopPropagation();
+                    // 清除按钮是独立按钮，不需要阻止事件冒泡
                     
                     clickCount++;
                     
@@ -1198,6 +1377,10 @@
                         } else if (clickCount === 2) {
                             // 双击事件
                             clearCache();
+                        } else if (clickCount === 5) {
+                            // 五击事件 - 重置登录限制
+                            resetLoginAttempts();
+                            showToast(ToastMessages.success.lockoutReset);
                         }
                         // 重置点击计数
                         clickCount = 0;
@@ -1209,30 +1392,86 @@
         }
     </script>
 
-    <!-- 登录功能 -->
+    <!-- 9. 登录功能 -->
     <script id="login-function">
+        // 获取登录失败次数
+        function getFailedAttempts() {
+            const attempts = localStorage.getItem('failedAttempts');
+            return attempts ? parseInt(attempts, 10) : 0;
+        }
+        
+        // 设置登录失败次数
+        function setFailedAttempts(attempts) {
+            localStorage.setItem('failedAttempts', attempts.toString());
+        }
+        
+        // 获取锁定时间
+        function getLockoutTime() {
+            const lockoutTime = localStorage.getItem('lockoutTime');
+            return lockoutTime ? parseInt(lockoutTime, 10) : 0;
+        }
+        
+        // 设置锁定时间
+        function setLockoutTime(time) {
+            localStorage.setItem('lockoutTime', time.toString());
+        }
+        
+        // 检查是否被锁定
+        function isLockedOut() {
+            const lockoutTime = getLockoutTime();
+            if (!lockoutTime) return false;
+            
+            return Date.now() < lockoutTime + LOCKOUT_DURATION;
+        }
+        
+        // 重置登录限制（用于五击清除按钮功能）
+        function resetLoginAttempts() {
+            setFailedAttempts(0);
+            setLockoutTime(0);
+        }
+        
         async function login() {
-            let inputPwd = elements.passwordInput.value === '********' && realSavedPwd ? realSavedPwd : elements.passwordInput.value.trim();
+            // 检查是否被锁定
+            if (isLockedOut()) {
+                showToast(ToastMessages.error.lockedOut, true);
+                return;
+            }
+            
+            let inputPassword = elements.passwordInput.value === '********' && realSavedPassword ? realSavedPassword : elements.passwordInput.value.trim();
             
             // 简单的密码验证
-            if (!inputPwd) {
-                showToast('请输入密码', true);
+            if (!inputPassword) {
+                showToast(ToastMessages.error.emptyPassword, true);
                 return;
             }
             
             try {
                 // 密码验证
-                const hashedInput = await hashPassword(inputPwd);
+                const hashedInput = await hashPassword(inputPassword);
                 if (hashedInput !== SECRET_KEY_HASH) {
-                    showToast('密码错误，请重试', true);
+                    // 密码错误，增加失败次数
+                    let failedAttempts = getFailedAttempts() + 1;
+                    setFailedAttempts(failedAttempts);
+                    
+                    // 检查是否达到最大失败次数
+                    if (failedAttempts >= MAX_FAILED_ATTEMPTS) {
+                        // 设置锁定时间
+                        setLockoutTime(Date.now());
+                        showToast(ToastMessages.error.tooManyAttempts, true);
+                    } else {
+                        showToast(`${ToastMessages.error.loginFailed} (${failedAttempts}/${MAX_FAILED_ATTEMPTS})`, true);
+                    }
                     return;
                 }
                 
+                // 密码正确，重置失败次数
+                resetLoginAttempts();
+                
                 // 保存密码（加密）
                 if (elements.rememberPwd.checked) {
-                    const saved = await savePassword(inputPwd);
+                    const saved = await savePassword(inputPassword);
                     if (!saved) {
-                        showToast('保存密码失败，但登录成功', true);
+                        showToast(ToastMessages.error.savePasswordFailed, true);
                     }
                 } else {
                     clearPassword();
@@ -1248,18 +1487,18 @@
                 // 设置登录状态标志
                 localStorage.setItem('isLogin', 'true');
                 
-                showToast('登录成功，正在跳转...');
+                showToast(ToastMessages.success.login);
                 setTimeout(() => {
                     window.location.href = 'lychome';
                 }, 1000);
             } catch (error) {
                 console.error('登录失败:', error);
-                showToast('登录失败，请重试', true);
+                showToast(ToastMessages.error.loginFailed, true);
             }
         }
     </script>
 
-    <!-- 背景图设置功能 -->
+    <!-- 10. 背景图设置功能 -->
     <script id="background-setting">
         // 打开背景图设置弹窗
         function openBgModal() {
@@ -1311,6 +1550,21 @@
             elements.bgModal.style.display = 'none';
         }
 
+        // 通用历史记录管理函数
+        function manageHistory(url, historyKey, maxItems = 5) {
+            if (!url) return;
+            
+            // 更新历史记录
+            let history = JSON.parse(localStorage.getItem(historyKey) || '[]');
+            // 移除重复项
+            history = history.filter(itemUrl => itemUrl !== url);
+            // 添加到历史记录开头
+            history.unshift(url);
+            // 限制历史记录数量
+            history = history.slice(0, maxItems);
+            localStorage.setItem(historyKey, JSON.stringify(history));
+        }
+
         // 保存背景图设置
         function saveBgSetting() {
             const lightUrl = elements.lightBgUrl.value;
@@ -1322,28 +1576,14 @@
                 localStorage.setItem('lightBgImage', lightUrl);
                 
                 // 更新白天模式历史记录
-                let lightHistory = JSON.parse(localStorage.getItem('lightBgHistory') || '[]');
-                // 移除重复项
-                lightHistory = lightHistory.filter(url => url !== lightUrl);
-                // 添加到历史记录开头
-                lightHistory.unshift(lightUrl);
-                // 限制历史记录数量为5条
-                lightHistory = lightHistory.slice(0, 5);
-                localStorage.setItem('lightBgHistory', JSON.stringify(lightHistory));
+                manageHistory(lightUrl, 'lightBgHistory');
             }
             if (darkUrl) {
                 document.documentElement.style.setProperty('--dark-bg-image', `url("${darkUrl}")`);
                 localStorage.setItem('darkBgImage', darkUrl);
                 
                 // 更新夜间模式历史记录
-                let darkHistory = JSON.parse(localStorage.getItem('darkBgHistory') || '[]');
-                // 移除重复项
-                darkHistory = darkHistory.filter(url => url !== darkUrl);
-                // 添加到历史记录开头
-                darkHistory.unshift(darkUrl);
-                // 限制历史记录数量为5条
-                darkHistory = darkHistory.slice(0, 5);
-                localStorage.setItem('darkBgHistory', JSON.stringify(darkHistory));
+                manageHistory(darkUrl, 'darkBgHistory');
             }
             
             closeBgModal();
@@ -1424,129 +1664,76 @@
             
             // 为历史记录项添加事件监听器
             function addHistoryItemListeners() {
-                // 鼠标悬停在历史记录项上自动填入（总是显示，移开恢复到实时内容）
+                // 通用事件监听器函数
+                function setupHistoryItemListeners(items, inputElement, listVisible, historyList, originalValue, historyKey) {
+                    items.forEach(item => {
+                        let currentValue = '';
+                        let clickTimer = null;
+                        
+                        item.addEventListener('mouseenter', function() {
+                            // 保存当前实时值
+                            currentValue = inputElement.value;
+                            // 显示历史记录项的链接
+                            inputElement.value = this.dataset.url;
+                        });
+                        
+                        item.addEventListener('mouseleave', function() {
+                            // 只有当历史记录列表仍然可见时才恢复值
+                            if (listVisible) {
+                                inputElement.value = currentValue;
+                            }
+                        });
+                        
+                        item.addEventListener('click', function(e) {
+                            // 历史记录项点击事件不需要阻止事件冒泡
+                            
+                            // 清除之前的定时器
+                            if (clickTimer) {
+                                clearTimeout(clickTimer);
+                            }
+                            
+                            // 设置新的定时器，延迟200毫秒执行单击逻辑
+                            clickTimer = setTimeout(() => {
+                                inputElement.value = this.dataset.url;
+                                originalValue = this.dataset.url; // 更新原始值，避免恢复
+                                listVisible = false;
+                                historyList.style.display = 'none';
+                            }, 200);
+                        });
+                        
+                        // 双击删除历史记录项（默认值不支持删除）
+                        item.addEventListener('dblclick', function(e) {
+                            // 历史记录项双击事件不需要阻止事件冒泡
+                            
+                            // 清除单击定时器，阻止单击逻辑执行
+                            if (clickTimer) {
+                                clearTimeout(clickTimer);
+                                clickTimer = null;
+                            }
+                            
+                            // 检查是否为默认值
+                            const isDefault = this.textContent === '白天默认' || this.textContent === '夜间默认';
+                            if (!isDefault) {
+                                // 获取历史记录URL
+                                const url = this.dataset.url;
+                                // 从本地存储中删除历史记录
+                                let history = JSON.parse(localStorage.getItem(historyKey) || '[]');
+                                history = history.filter(itemUrl => itemUrl !== url);
+                                localStorage.setItem(historyKey, JSON.stringify(history));
+                                // 重新加载历史记录
+                                loadHistory();
+                            }
+                        });
+                    });
+                }
+                
+                // 为白天模式历史记录项添加事件监听器
                 const lightHistoryItems = lightHistoryList.querySelectorAll('.history-item');
-                lightHistoryItems.forEach(item => {
-                    let currentLightValue = '';
-                    let clickTimer = null;
-                    
-                    item.addEventListener('mouseenter', function() {
-                        // 保存当前实时值
-                        currentLightValue = lightInput.value;
-                        // 显示历史记录项的链接
-                        lightInput.value = this.dataset.url;
-                    });
-                    
-                    item.addEventListener('mouseleave', function() {
-                        // 只有当历史记录列表仍然可见时才恢复值
-                        if (lightListVisible) {
-                            lightInput.value = currentLightValue;
-                        }
-                    });
-                    
-                    item.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        
-                        // 清除之前的定时器
-                        if (clickTimer) {
-                            clearTimeout(clickTimer);
-                        }
-                        
-                        // 设置新的定时器，延迟200毫秒执行单击逻辑
-                        clickTimer = setTimeout(() => {
-                            lightInput.value = this.dataset.url;
-                            originalLightValue = this.dataset.url; // 更新原始值，避免恢复
-                            lightListVisible = false;
-                            lightHistoryList.style.display = 'none';
-                        }, 200);
-                    });
-                    
-                    // 双击删除历史记录项（默认值不支持删除）
-                    item.addEventListener('dblclick', function(e) {
-                        e.stopPropagation();
-                        
-                        // 清除单击定时器，阻止单击逻辑执行
-                        if (clickTimer) {
-                            clearTimeout(clickTimer);
-                            clickTimer = null;
-                        }
-                        
-                        // 检查是否为默认值
-                        const isDefault = this.textContent === '白天默认' || this.textContent === '夜间默认';
-                        if (!isDefault) {
-                            // 获取历史记录URL
-                            const url = this.dataset.url;
-                            // 从本地存储中删除历史记录
-                            let lightHistory = JSON.parse(localStorage.getItem('lightBgHistory') || '[]');
-                            lightHistory = lightHistory.filter(itemUrl => itemUrl !== url);
-                            localStorage.setItem('lightBgHistory', JSON.stringify(lightHistory));
-                            // 重新加载历史记录
-                            loadHistory();
-                        }
-                    });
-                });
+                setupHistoryItemListeners(lightHistoryItems, lightInput, lightListVisible, lightHistoryList, originalLightValue, 'lightBgHistory');
                 
                 // 为夜间模式历史记录项添加事件监听器
                 const darkHistoryItems = darkHistoryList.querySelectorAll('.history-item');
-                darkHistoryItems.forEach(item => {
-                    let currentDarkValue = '';
-                    let clickTimer = null;
-                    
-                    item.addEventListener('mouseenter', function() {
-                        // 保存当前实时值
-                        currentDarkValue = darkInput.value;
-                        // 显示历史记录项的链接
-                        darkInput.value = this.dataset.url;
-                    });
-                    
-                    item.addEventListener('mouseleave', function() {
-                        // 只有当历史记录列表仍然可见时才恢复值
-                        if (darkListVisible) {
-                            darkInput.value = currentDarkValue;
-                        }
-                    });
-                    
-                    item.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        
-                        // 清除之前的定时器
-                        if (clickTimer) {
-                            clearTimeout(clickTimer);
-                        }
-                        
-                        // 设置新的定时器，延迟200毫秒执行单击逻辑
-                        clickTimer = setTimeout(() => {
-                            darkInput.value = this.dataset.url;
-                            originalDarkValue = this.dataset.url; // 更新原始值，避免恢复
-                            darkListVisible = false;
-                            darkHistoryList.style.display = 'none';
-                        }, 200);
-                    });
-                    
-                    // 双击删除历史记录项（默认值不支持删除）
-                    item.addEventListener('dblclick', function(e) {
-                        e.stopPropagation();
-                        
-                        // 清除单击定时器，阻止单击逻辑执行
-                        if (clickTimer) {
-                            clearTimeout(clickTimer);
-                            clickTimer = null;
-                        }
-                        
-                        // 检查是否为默认值
-                        const isDefault = this.textContent === '白天默认' || this.textContent === '夜间默认';
-                        if (!isDefault) {
-                            // 获取历史记录URL
-                            const url = this.dataset.url;
-                            // 从本地存储中删除历史记录
-                            let darkHistory = JSON.parse(localStorage.getItem('darkBgHistory') || '[]');
-                            darkHistory = darkHistory.filter(itemUrl => itemUrl !== url);
-                            localStorage.setItem('darkBgHistory', JSON.stringify(darkHistory));
-                            // 重新加载历史记录
-                            loadHistory();
-                        }
-                    });
-                });
+                setupHistoryItemListeners(darkHistoryItems, darkInput, darkListVisible, darkHistoryList, originalDarkValue, 'darkBgHistory');
             }
             
             // 添加输入框事件监听器
@@ -1577,39 +1764,50 @@
         }
     </script>
 
-    <!-- Toast消息功能 -->
-    <script id="toast-message">
-        function showToast(message, isError = false) {
-            const fragment = document.createDocumentFragment();
-            const toast = document.createElement('div');
-            toast.className = `toast-notice ${isError ? 'toast-error' : ''}`;
-            toast.textContent = message;
-            fragment.appendChild(toast);
-            document.body.appendChild(fragment);
-            
-            // 3秒后自动移除
-            setTimeout(() => {
-                if (toast.parentNode) {
-                    toast.parentNode.removeChild(toast);
-                }
-            }, 3000);
-        }
-    </script>
-
-    <!-- 底部信息功能脚本 -->
+    <!-- 11. 底部信息功能脚本 -->
     <script id="footer-info">
         // 加载访客信息
         function loadVisitorInfo() {
           const welcomeEl = document.getElementById('welcome');
           
-          // 主API：使用返回中国地址的API
-          fetch('https://v2.xxapi.cn/api/ip')
+          // 检查IP缓存
+          const cachedIP = CacheManager.getIPCache();
+          if (cachedIP) {
+            // 使用缓存数据
+            const { ip, address, isp } = cachedIP;
+            const welcomeMessage = `欢迎 <a href="http://api.nange.cn/" target="_blank">${address}</a> <a href="http://test.ustc.edu.cn/" target="_blank">${isp} IP：</a> <a href="https://ipw.cn/ip/" target="_blank" class="ip-address">${ip}</a> 的小伙伴访问本站`;
+            if (welcomeEl) {
+              welcomeEl.innerHTML = welcomeMessage;
+              welcomeEl.classList.add('loaded');
+            }
+            return;
+          }
+          
+          // 缓存不存在或已过期，请求API
+          // 主API：使用api.nange.cn
+          fetch('http://api.nange.cn/json')
             .then(response => response.json())
             .then(data => {
-              if (data.code === 200 && data.data) {
-                const ip = data.data.ip;
-                const address = data.data.address || '';
-                const isp = data.data.isp || '';
+              // 验证返回数据是否完整
+              if (data && data.ip) {
+                const ip = data.ip;
+                const country = data.country || '';
+                const region = data.region || '';
+                const city = data.city || '';
+                const district = data.district || '';
+                const isp = data.isp || data.isp_org || '';
+                
+                // 构建完整地址
+                let address = '';
+                if (country) address += country;
+                if (region) address += region;
+                if (city) address += city;
+                if (district) address += district;
+                
+                // 更新缓存
+                const ipData = { ip, address, isp };
+                CacheManager.cacheIP(ipData);
+                
                 const welcomeMessage = `欢迎 <a href="http://api.nange.cn/" target="_blank">${address}</a> <a href="http://test.ustc.edu.cn/" target="_blank">${isp} IP：</a> <a href="https://ipw.cn/ip/" target="_blank" class="ip-address">${ip}</a> 的小伙伴访问本站`;
                 
                 if (welcomeEl) {
@@ -1620,50 +1818,34 @@
             })
             .catch(error => {
               console.error("主API获取IP信息失败：", error);
-              // 失败时使用备用API (ip-api.com)
-              fetch('http://demo.ip-api.com/json/?lang=zh-CN')
+              // 备用API：使用返回中国地址的API
+              fetch('https://v2.xxapi.cn/api/ip')
                 .then(response => response.json())
                 .then(data => {
-                  if (data.status === 'success') {
-                    const ip = data.query;
-                    const city = data.city || '';
-                    const region = data.regionName || '';
-                    const country = data.country || '';
-                    const isp = data.isp || '';
-                    let welcomeMessage;
+                  if (data.code === 200 && data.data) {
+                    const ip = data.data.ip;
+                    const address = data.data.address || '';
+                    const isp = data.data.isp || '';
                     
-                    if (country === '中国') {
-                                        welcomeMessage = `欢迎 <a href="http://api.nange.cn/" target="_blank">${region}${city}</a> <a href="http://test.ustc.edu.cn/" target="_blank">${isp} IP：</a> <a href="https://ipw.cn/ip/" target="_blank" class="ip-address">${ip}</a> 的小伙伴访问本站`;
-                                    } else {
-                                        welcomeMessage = `欢迎 <a href="http://api.nange.cn/" target="_blank">${country}</a> <a href="http://test.ustc.edu.cn/" target="_blank">${isp} IP：</a> <a href="https://ipw.cn/ip/" target="_blank" class="ip-address">${ip}</a> 的小伙伴访问本站`;
-                                    }
-                                    
-                                    if (welcomeEl) {
-                                        welcomeEl.innerHTML = welcomeMessage;
+                    // 更新缓存
+                    const ipData = { ip, address, isp };
+                    CacheManager.cacheIP(ipData);
+                    
+                    const welcomeMessage = `欢迎 <a href="http://api.nange.cn/" target="_blank">${address}</a> <a href="http://test.ustc.edu.cn/" target="_blank">${isp} IP：</a> <a href="https://ipw.cn/ip/" target="_blank" class="ip-address">${ip}</a> 的小伙伴访问本站`;
+                    
+                    if (welcomeEl) {
+                      welcomeEl.innerHTML = welcomeMessage;
                       welcomeEl.classList.add('loaded');
                     }
                   }
                 })
                 .catch(backupError => {
                   console.error("备用API获取失败：", backupError);
-                  // 再次失败时使用ipify API获取仅IP信息
-                  fetch('https://api.ipify.org?format=json')
-                    .then(response => response.json())
-                    .then(data => {
-                      const ip = data.ip;
-                      const welcomeMessage = `欢迎 <a href="https://ipw.cn/ip/" target="_blank" class="ip-address">${ip}</a> 的小伙伴访问本站`;
-                      if (welcomeEl) {
-                        welcomeEl.innerHTML = welcomeMessage;
-                        welcomeEl.classList.add('loaded');
-                      }
-                    })
-                    .catch(finalError => {
-                      console.error("所有API获取失败：", finalError);
-                      if (welcomeEl) {
-                        welcomeEl.textContent = "欢迎访问本站";
-                        welcomeEl.classList.add('loaded');
-                      }
-                    });
+                  // 最终备用：使用本地欢迎信息
+                  if (welcomeEl) {
+                    welcomeEl.textContent = "欢迎访问本站";
+                    welcomeEl.classList.add('loaded');
+                  }
                 });
             });
         }
@@ -1817,25 +1999,56 @@
         }
     </script>
 
-    <!-- 页面初始化 -->
+    <!-- 12. 页面初始化 -->
     <script id="page-init">
         document.addEventListener('DOMContentLoaded', async function() {
             try {
+                // 缓存静态资源
+                const staticResources = [
+                    'https://cdn.jsdelivr.net/gh/leeyuchen4073/leeyuchen.github.io/assets/icons/favicon.ico',
+                    'https://cdn.jsdelivr.net/gh/leeyuchen4073/leeyuchen.github.io/assets/icons/favicon.svg',
+                    'https://cdn.jsdelivr.net/gh/leeyuchen4073/leeyuchen.github.io/assets/icons/favicon-96x96.png'
+                ];
+                
+                // 并行缓存所有静态资源
+                await Promise.all(
+                    staticResources.map(url => CacheManager.cacheStaticResource(url).catch(err => console.log('Failed to cache resource:', url)))
+                );
+                
                 // 加载设置
                 const settings = loadSettings();
                 
                 // 加载密码
-                const savedPwd = await loadPassword();
-                if (savedPwd) {
-                    realSavedPwd = savedPwd;
-                    // 立即设置为8位脱敏字符
+                const savedPassword = await loadPassword();
+                if (savedPassword) {
+                    realSavedPassword = savedPassword;
+                    // 设置为只读状态并显示固定脱敏字符
                     elements.passwordInput.value = '********';
-                    // 添加延迟，确保浏览器自动填充后也能保持固定脱敏长度
-                    setTimeout(() => {
-                        if (realSavedPwd) {
-                            elements.passwordInput.value = '********';
+                    elements.passwordInput.readOnly = true;
+                    
+                    // 添加点击事件，点击时变为可编辑状态
+                    elements.passwordInput.addEventListener('click', function() {
+                        if (realSavedPassword) {
+                            // 变为可编辑状态
+                            this.readOnly = false;
+                            // 清空输入框，让用户重新输入
+                            this.value = '';
+                            // 清除保存的密码引用
+                            realSavedPassword = null;
+                            // 聚焦到输入框
+                            this.focus();
                         }
-                    }, 1000);
+                    });
+                    
+                    // 使用input事件监听器，实时检测输入变化
+                    elements.passwordInput.addEventListener('input', function() {
+                        if (realSavedPassword) {
+                            // 只有当输入值不是用户手动输入时才强制设置（避免影响正常输入）
+                            if (this.value !== realSavedPassword && this.value !== '') {
+                                this.value = '********';
+                            }
+                        }
+                    });
                 }
                 
                 // 设置自动登录状态
@@ -1843,7 +2056,7 @@
                     elements.autoLogin.checked = true;
                     elements.rememberPwd.checked = true;
                     // 如果有保存的密码且启用了自动登录，自动执行登录
-                    if (savedPwd) {
+                    if (savedPassword) {
                         setTimeout(() => {
                             login();
                         }, 500);
@@ -1873,5 +2086,6 @@
             }
         });
     </script>
+
 </body>
 </html>
