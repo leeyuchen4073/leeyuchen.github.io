@@ -1828,7 +1828,14 @@
                 const savedPwd = await loadPassword();
                 if (savedPwd) {
                     realSavedPwd = savedPwd;
+                    // 立即设置为8位脱敏字符
                     elements.passwordInput.value = '********';
+                    // 添加延迟，确保浏览器自动填充后也能保持固定脱敏长度
+                    setTimeout(() => {
+                        if (realSavedPwd) {
+                            elements.passwordInput.value = '********';
+                        }
+                    }, 1000);
                 }
                 
                 // 设置自动登录状态
