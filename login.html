@@ -35,6 +35,15 @@ permalink: /login/
         })();
     </script>
     
+    <script>
+        (function() {
+            if (window.location.pathname === '/login.html') {
+                window.location.replace('/login/');
+                throw new Error('这里是开发调试控制台错误提示信息：重定向到不带后缀的版本');
+            }
+        })();
+    </script>
+    
     <style>
         * {
             margin: 0;
@@ -1317,7 +1326,7 @@ permalink: /login/
                 
                 showToast('登录成功，正在跳转到主页...');
                 setTimeout(() => {
-                    window.location.href = 'lychome/';
+                    window.location.href = 'lychome';
                 }, 1000);
             } catch (error) {
                 console.error('登录失败:', error);
