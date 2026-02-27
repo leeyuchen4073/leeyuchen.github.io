@@ -11,13 +11,11 @@ baseurl: ""  # 网站子路径，如 "/blog"，如果网站在根目录则留空
 url: "https://leeyuchen.top"  # 网站完整URL，包含协议 - 应用场景：生成绝对链接、SEO、社交媒体分享
 
 # 作者信息
-# 应用场景：在博客文章、关于页面显示作者信息，或在RSS feed中包含作者信息
+# 应用场景：在个人资料页面显示作者信息
 
 author:
-  name: leeyuchen  # 作者名称 - 应用场景：文章作者署名、个人资料显示
-  email:  # 作者邮箱 - 应用场景：联系表单、RSS feed作者信息
-  avatar: "https://cdn.jsdelivr.net/gh/leeyuchen4073/leeyuchen.github.io/assets/icons/favicon.svg"  # 作者头像URL - 应用场景：个人资料页面、评论系统
-  bio:  # 作者简介 - 应用场景：关于页面、个人资料卡片
+  name: leeyuchen  # 作者名称 - 应用场景：个人资料显示
+  avatar: "https://cdn.jsdelivr.net/gh/leeyuchen4073/leeyuchen.github.io/assets/icons/favicon.svg"  # 作者头像URL - 应用场景：个人资料页面
 
 # 构建配置
 # 应用场景：控制Jekyll构建网站时的行为
@@ -26,7 +24,7 @@ permalink: pretty  # 永久链接格式: pretty (无后缀), date (日期格式)
 
 encoding: "utf-8"  # 文件编码，建议使用UTF-8 - 应用场景：确保网站内容（特别是中文）正确显示，避免乱码
 
-timezone: Asia/Shanghai  # 时区设置 - 应用场景：正确显示文章发布时间，避免时区错误
+timezone: Asia/Shanghai  # 时区设置 - 应用场景：正确显示时间信息，避免时区错误
 
 # 排除文件/目录
 # 应用场景：告诉Jekyll构建时忽略哪些文件，减少构建时间和避免不必要的文件被处理
@@ -35,10 +33,6 @@ exclude:
   - README.md  # 项目说明文件，不需要构建到网站中
   - .gitignore  # Git配置文件，不需要构建到网站中
   - node_modules  # npm依赖目录，不需要构建到网站中
-  - Gemfile  # Ruby依赖文件，不需要构建到网站中
-  - Gemfile.lock  # Ruby依赖锁定文件，不需要构建到网站中
-  - package.json  # npm配置文件，不需要构建到网站中
-  - package-lock.json  # npm依赖锁定文件，不需要构建到网站中
 
 # 包含文件/目录（默认Jekyll会忽略以下划线开头的文件/目录）
 # 应用场景：强制Jekyll处理通常会忽略的文件
@@ -56,116 +50,19 @@ kramdown:
   hard_wrap: false  # 是否在换行符处添加<br> - 应用场景：控制文本换行的处理方式
   syntax_highlighter: rouge  # 代码高亮引擎 - 应用场景：为代码块添加语法高亮，提升代码可读性
 
-# 主题配置
-# 应用场景：设置网站的视觉风格和布局
-
-theme: minima  # 使用的主题名称 - 应用场景：选择网站的基础主题，控制整体布局和样式
-
-theme_color: "rgba(100, 116, 219, 1)"  # 主题主色调（rgba格式） - 应用场景：定义网站的主色调，影响按钮、链接等元素的颜色
-
-# 分页配置
-# 应用场景：当网站有大量内容需要分页显示时
-
-paginate: 5  # 每页显示的文章数量 - 应用场景：控制博客文章列表每页显示的数量，避免单页内容过长
-
-paginate_path: "/page:num/"  # 分页路径格式 - 应用场景：定义分页页面的URL结构
-
 # 插件配置
 # 应用场景：扩展Jekyll的功能，添加额外的特性
 
 plugins:
-  - jekyll-feed  # 生成RSS feed - 应用场景：允许用户通过RSS订阅网站更新
-  - jekyll-paginate  # 分页功能 - 应用场景：启用分页功能，配合paginate配置使用
   - jekyll-seo-tag  # SEO标签生成 - 应用场景：自动生成SEO相关的meta标签，提升网站在搜索引擎中的表现
   - jekyll-sitemap  # 生成站点地图 - 应用场景：帮助搜索引擎更好地索引网站内容
-
-# 社交链接
-# 应用场景：在网站中显示作者的社交媒体链接，方便访问者关注
-
-social_links:
-  github: leeyuchen4073  # GitHub用户名 - 应用场景：显示GitHub链接，引导访问者查看代码仓库
-  twitter:  # Twitter用户名 - 应用场景：显示Twitter链接，引导访问者关注社交媒体
-  facebook:  # Facebook用户名 - 应用场景：显示Facebook链接，引导访问者关注社交媒体
-  linkedin:  # LinkedIn用户名 - 应用场景：显示LinkedIn链接，引导访问者查看职业资料
-  instagram:  # Instagram用户名 - 应用场景：显示Instagram链接，引导访问者查看图片内容
-  email:  # 邮箱地址 - 应用场景：显示邮箱链接，方便访问者联系
-
-# 导航菜单
-# 应用场景：在网站顶部或侧边栏显示导航链接，方便访问者浏览不同页面
-
-nav_menu:
-  - title: 首页
-    url: /  # 网站首页链接
-  - title: 关于
-    url: /about/  # 关于页面链接
-  - title: 博客
-    url: /blog/  # 博客页面链接
-  - title: 联系方式
-    url: /contact/  # 联系方式页面链接
-
-# 自定义变量
-# 应用场景：存储网站特定的配置值，方便在模板中引用
-
-custom:
-  analytics_id:  # Google Analytics跟踪ID - 应用场景：集成Google Analytics，统计网站访问数据
-  disqus_shortname:  # Disqus评论系统短名称 - 应用场景：集成Disqus评论系统，允许访问者评论
-  google_verify:  # Google搜索控制台验证代码 - 应用场景：验证网站所有权，使用Google搜索控制台工具
-  baidu_verify:  # 百度站长平台验证代码 - 应用场景：验证网站所有权，使用百度站长工具
 
 # 语言配置
 # 应用场景：设置网站的默认语言，影响HTML lang属性和本地化
 
 lang: zh-CN  # 网站语言 - 应用场景：告诉浏览器和搜索引擎网站的语言，影响SEO和屏幕阅读器
 
-# 时区配置
-# 应用场景：确保日期和时间在网站中正确显示
-
-timezone: Asia/Shanghai  # 网站时区 - 应用场景：正确显示文章发布时间，避免时区错误
-
-# 未来日期
-# 应用场景：控制是否处理未来日期的文章
-
-tfuture: true  # 是否处理未来日期的文章 - 应用场景：如果设置为false，未来日期的文章不会被构建，适合提前写好但定时发布的文章
-
 # 链接配置
 # 应用场景：控制生成的链接是相对路径还是绝对路径
 
-relative_links: false  # 是否使用相对链接 - 应用场景：设置为true时使用相对链接，适合本地开发或部署在不同域名的情况
-
-# 包含文件类型
-# 应用场景：强制Jekyll处理特定类型的文件
-
-include:
-  - .htaccess
-  - _pages  # 页面目录，存放独立页面
-
-# 数据文件配置
-# 应用场景：指定数据文件的目录，用于存储可重用的数据
-
-data_dir: _data  # 数据文件目录 - 应用场景：存储YAML、JSON等数据文件，在模板中引用
-
-# 集合配置
-# 应用场景：定义和配置内容集合，如博客文章、项目等
-
-collections:
-  posts:  # 博客文章集合
-    output: true  # 是否生成单独的页面 - 应用场景：设置为true时，每个文章会生成单独的HTML页面
-    permalink: /:year/:month/:day/:title/  # 文章永久链接格式 - 应用场景：定义文章页面的URL结构
-  projects:  # 项目集合（示例）
-    output: true  # 是否生成单独的页面 - 应用场景：设置为true时，每个项目会生成单独的HTML页面
-    permalink: /projects/:path/  # 项目永久链接格式 - 应用场景：定义项目页面的URL结构
-
-# 默认布局
-# 应用场景：为不同路径的文件设置默认的布局模板
-
-defaults:
-  - scope:
-      path: ""  # 所有文件
-    values:
-      layout: "default"  # 默认布局 - 应用场景：为所有页面设置默认的基础布局，确保整体风格一致
-  - scope:
-      path: "_posts"  # 博客文章
-    values:
-      layout: "post"  # 文章默认布局 - 应用场景：为博客文章设置专门的布局，包含文章特有的元素
-      author: "leeyuchen"  # 默认作者 - 应用场景：为所有文章自动添加作者信息，避免重复设置
-      comments: true  # 默认开启评论 - 应用场景：为所有文章默认开启评论功能
+relative_links: false  # 是否使用相对链接 - 应用场景：设置为false时使用绝对链接，适合生产环境
