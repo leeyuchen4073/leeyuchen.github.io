@@ -1,0 +1,24 @@
+{
+  "urls": [
+    {
+      "name": "点播·主用（8 站）",
+      "url": "https://leeyuchen.top/tv/tvbox-pc.json"
+    },
+    {
+      "name": "我不是摸鱼儿",
+      "url": "http://www.y456y.com"
+    },
+    {
+      "name": "饭太硬",
+      "url": "http://www.饭太硬.net/tv"
+    },
+    {
+      "name": "9280",
+      "url": "https://9280.kstore.vip/newwex.json"
+    },
+    {
+      "name": "点播·备用",
+      "url": "http://www.摸鱼儿.com"
+    }
+  ]
+}
