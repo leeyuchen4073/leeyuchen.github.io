@@ -1,0 +1,28 @@
+{
+    "lives":  [
+                  {
+                      "name":  "央视虎牙",
+                      "url":  "https://leeyuchen.top/tv/%E5%A4%AE%E8%A7%86%E8%99%8E%E7%89%99.txt"
+                  },
+                  {
+                      "name":  "IPV4备用",
+                      "url":  "https://live.zbds.top/tv/iptv4.txt"
+                  },
+                  {
+                      "name":  "网络直播",
+                      "url":  "https://live.yang-1989.eu.org/Live.m3u"
+                  },
+                  {
+                      "name":  "直播聚合",
+                      "url":  "https://leeyuchen.top/tv/%E7%9B%B4%E6%92%AD%E8%81%9A%E5%90%88.txt"
+                  },
+                  {
+                      "name":  "麻豆传媒",
+                      "url":  "https://leeyuchen.top/tv/%E9%BA%BB%E8%B1%86%E4%BC%A0%E5%AA%92.txt"
+                  },
+                  {
+                      "name":  "央视虎牙(备)",
+                      "url":  "https://gh-proxy.com/https://raw.githubusercontent.com/kakaxi-1/IPTV/main/ipv4.txt"
+                  }
+              ]
+}
