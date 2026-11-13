@@ -33,7 +33,10 @@
                                          "体育赛事",
                                          "ai短剧",
                                          "伦理"
-                                     ]
+                                     ],
+                      "header":  {
+                                     "Referer":  "https://api.apibdzy.com/"
+                                 }
                   },
                   {
                       "key":  "dytt",
